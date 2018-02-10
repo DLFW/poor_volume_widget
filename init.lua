@@ -8,6 +8,8 @@ local stdout_widget = wibox.widget {
     layout = wibox.layout.fixed.horizontal,
 }
 
+text_widget.font = "Inconsolata 10"
+
 
 local trigger = [[bash -c '
   stdbuf -oL alsactl monitor
@@ -21,9 +23,23 @@ bar_width=20
 
 function value_to_bar(value)
     bars = math.floor(bar_width * value / 100)
---     return tostring(bars)
--- end
-    result = "[" .. string.rep("#",bars) .. string.rep(" ",bar_width-bars) .. "]"
+    lbar = ""
+    if bars > 0 then
+        bars = bars - 1
+        rest = ((bar_width * value) % 100)
+        if rest < 26 then
+                lbar = "|"
+        else if rest < 51 then
+                lbar = "❘"
+            else if rest < 76 then
+                    lbar = "❙"
+                else
+                    lbar = "❚"
+                end
+            end
+        end
+    end
+    result = "[" .. string.rep("❚",bars) .. lbar .. string.rep(" ",bar_width-bars) .. "]"
     return result
 end
 
