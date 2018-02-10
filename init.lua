@@ -1,37 +1,55 @@
 local wibox = require("wibox")
 local awful = require("awful")
-local brightness_text = wibox.widget.textbox()
--- brightness_text:set_font('Play 9')
+local naughty = require("naughty")
+local text_widget = wibox.widget.textbox()
 
--- local brightness_icon = wibox.widget {
---     {
---     	image = path_to_icons .. "display-brightness-symbolic.svg",
---     	resize = false,
---         widget = wibox.widget.imagebox,
---     },
---     top = 3,
---     widget = wibox.container.margin
--- }
-
-brightness_text:set_text("foo!")
-
-local brightness_widget = wibox.widget {
---    brightness_icon,
-    brightness_text,
+local stdout_widget = wibox.widget {
+    text_widget,
     layout = wibox.layout.fixed.horizontal,
 }
 
-local noisy = [[bash -c '
-  tail -f /home/daniel/noisy
+
+local trigger = [[bash -c '
+  stdbuf -oL alsactl monitor
 ']]
 
-awful.spawn.with_line_callback(noisy, {
+local value_cmd = [[bash -c '
+  awk -F"[][]" '"'"'/dB/ { print $2 }'"'"' <(amixer sget Master) | sed "s/%//"
+']]
+
+bar_width=20
+
+function value_to_bar(value)
+    bars = math.floor(bar_width * value / 100)
+--     return tostring(bars)
+-- end
+    result = "[" .. string.rep("#",bars) .. string.rep(" ",bar_width-bars) .. "]"
+    return result
+end
+
+function update(trigger_line)
+    awful.spawn.easy_async(
+        value_cmd,
+        function(stdout, stderr, reason, exit_code) 
+            --naughty.notify { text = stdout }
+            value = tonumber(stdout)
+            text_widget:set_text(value_to_bar(value))
+            --text_widget:set_text(stdout)
+        end
+    )
+end
+
+awful.spawn.with_line_callback(trigger, {
     stdout = function(line)
-        brightness_text:set_text(line)
+        --naughty.notify { text = line }
+        update(line)
     end,
     stderr = function(line)
-        brightness_text:set_text("ERR:"..line)
+        text_widget:set_text("ERR:"..line)
     end,
 })
 
-return brightness_widget
+update(nil)
+
+return stdout_widget
+
