@@ -35,10 +35,12 @@ pb_widget = wibox.widget {
         text_widget,
         layout = wibox.layout.stack
     },
-    top = 6,
+    top = 5,
     left = 4,
-    bottom= 4,
+    bottom= 5,
     right = 4,
+    width = 100,
+    forced_width = 100,
     layout = wibox.container.margin
 }
 
@@ -48,7 +50,7 @@ local trigger = [[bash -c '
 ']]
 
 local value_cmd = [[bash -c '
-  awk -F"[][]" '"'"'/dB/ { print $2 }'"'"' <(amixer sget Master) | sed "s/%//"
+  amixer sget Master
 ']]
 
 
@@ -56,9 +58,21 @@ function update(trigger_line)
     awful.spawn.easy_async(
         value_cmd,
         function(stdout, stderr, reason, exit_code) 
-            value = tonumber(stdout)
-            text_widget:set_text(stdout .. "AAA%")
+            value_string = string.match(string.match(stdout,"%d+%%"),"%d*")
+            local muted = false
+            if string.find(stdout, "%[off%]") then
+                muted = true
+            end
+            value = tonumber(value_string)
+            text_widget:set_text(value_string .. "%" .. (muted and " (mute)" or ""))
             progress_bar.value = value
+            if muted then
+                progress_bar.border_color = beautiful.bg_minimize
+                progress_bar.color = beautiful.bg_minimize
+            else
+                progress_bar.border_color = beautiful.bg_focus
+                progress_bar.color = beautiful.bg_focus
+            end
         end
     )
 end
