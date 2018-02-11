@@ -16,6 +16,40 @@ Colors and fonts are taken from the theme:
 * When muted, the bar border and filling is ``beautiful.bg_minimize``
 
 As of now, the widget does not support any interaction. This is quite fine for me and I don't plan to add any interactive function.
+
+Installation
+------------
+
+Change into your awesome configuration directory (mostly ~/.config/awesome) and clone the project (``git clone https://github.com/DLFW/poor_volume_widget.git``).
+Import the widget somewhere *after* you've loaded your theme and before you have to use the widget. (Doing it after loading the theme is neccessary to allow the widget to load the themes attributes.)
+
+.. code-block:: lua
+
+    beautiful.init("/home/somebody/.config/awesome/theme.lua")
+    local poor_volume_widget = require("poor_volume_widget")
+    
+Insert it into your desktop however you want like any other widget. Maybe like this:
+
+.. code-block:: lua
+
+    s.mywibox:setup {
+        layout = wibox.layout.align.horizontal,
+        { -- Left widgets
+            layout = wibox.layout.fixed.horizontal,
+            mylauncher,
+            s.mytaglist,
+            s.mypromptbox,
+        },
+        s.mytasklist, -- Middle widget
+        { -- Right widgets
+            layout = wibox.layout.fixed.horizontal,
+            poor_volume_widget,
+            mykeyboardlayout,
+            wibox.widget.systray(),
+            mytextclock,
+            s.mylayoutbox,
+        },
+    }
  
  
 .. _`Awesome WM`: https://awesomewm.org
