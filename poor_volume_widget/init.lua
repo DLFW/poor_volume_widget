@@ -11,8 +11,7 @@ local stdout_widget = wibox.widget {
 
 
 local text_widget = wibox.widget {
-    font = "Inconsolata 10",
-    --forced_width  = 80,
+    font = beautiful.font,
     align  = 'center',
     widget = wibox.widget.textbox
 }
