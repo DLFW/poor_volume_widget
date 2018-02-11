@@ -10,10 +10,10 @@ The poor volume widget depends on the programs ``alsactl`` and ``amixer``. Both 
 
 Colors and fonts are taken from the theme:
 
- * The bar border and filling is ``beautiful.bg_focus``
- * The background is ``beautiful.bg_normal``
- * The font is ``beautiful.font``
- * When muted, the bar border and filling is ``beautiful.bg_minimize``
+* The bar border and filling is ``beautiful.bg_focus``
+* The background is ``beautiful.bg_normal``
+* The font is ``beautiful.font``
+* When muted, the bar border and filling is ``beautiful.bg_minimize``
 
 As of now, the widget does not support any interaction. This is quite fine for me and I don't plan to add any interactive function.
  
