@@ -22,6 +22,7 @@ function factory(shape, margins, border_width)
             background_color = beautiful.bg_normal,
             color = beautiful.bg_focus,
             shape = shape,
+            bar_shape = shape,
             widget = wibox.widget.progressbar
     }
 
