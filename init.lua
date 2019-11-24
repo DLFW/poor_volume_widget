@@ -4,9 +4,10 @@ local naughty = require("naughty")
 local gears = require("gears")
 local beautiful = require("beautiful")
 
-function factory(shape, margins, border_width)
+function factory(shape, inner_shape, margins, border_width)
     shape = shape or gears.shape.rounded_bar
-    margins = margins or {2, 2, 2, 2}
+    inner_shape = inner_shape or gears.shape.rectangle
+    margins = margins or {5, 4, 5, 4}
     border_width = border_width or 1
     local text_widget = wibox.widget {
         font = beautiful.font,
@@ -22,21 +23,21 @@ function factory(shape, margins, border_width)
             background_color = beautiful.bg_normal,
             color = beautiful.bg_focus,
             shape = shape,
-            bar_shape = shape,
+            bar_shape = inner_shape,
             widget = wibox.widget.progressbar
     }
 
-    pb_widget = wibox.widget {
+    local pb_widget = wibox.widget {
         {
 
             progress_bar,
             text_widget,
             layout = wibox.layout.stack
         },
-        top = margins[0],
-        right = margins[1],
-        bottom= margins[2],
-        left = margins[3],
+        top = margins[1],
+        right = margins[2],
+        bottom= margins[3],
+        left = margins[4],
         width = 100,
         forced_width = 100,
         layout = wibox.container.margin
