@@ -19,9 +19,9 @@ function factory(shape, inner_shape, margins, border_width)
             max_value     = 100,
             value         = 0,
             border_width = border_width,
-            border_color = beautiful.bg_focus,
-            background_color = beautiful.bg_normal,
-            color = beautiful.bg_focus,
+            border_color = beautiful.border_poor_volume or beautiful.bg_focus,
+            background_color = beautiful.bg_poor_volume or beautiful.bg_normal,
+            color = beautiful.bar_poor_volume or beautiful.bg_focus,
             shape = shape,
             bar_shape = inner_shape,
             widget = wibox.widget.progressbar
@@ -29,10 +29,13 @@ function factory(shape, inner_shape, margins, border_width)
 
     local pb_widget = wibox.widget {
         {
-
             progress_bar,
-            text_widget,
-            layout = wibox.layout.stack
+            {
+                text_widget,
+                widget = wibox.container.background,
+                fg = beautiful.text_poor_volume or beautiful.fg_normal
+            },
+            layout = wibox.layout.stack,
         },
         top = margins[1],
         right = margins[2],
@@ -40,9 +43,8 @@ function factory(shape, inner_shape, margins, border_width)
         left = margins[4],
         width = 100,
         forced_width = 100,
-        layout = wibox.container.margin
+        layout = wibox.container.margin,
     }
-
 
     local trigger = [[bash -c '
       stdbuf -oL alsactl monitor
