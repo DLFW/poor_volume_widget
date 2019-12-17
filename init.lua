@@ -4,6 +4,8 @@ local naughty = require("naughty")
 local gears = require("gears")
 local beautiful = require("beautiful")
 
+local card = "PCH"
+
 function factory(shape, inner_shape, margins, border_width)
     shape = shape or gears.shape.rounded_bar
     inner_shape = inner_shape or gears.shape.rectangle
@@ -46,14 +48,13 @@ function factory(shape, inner_shape, margins, border_width)
         layout = wibox.container.margin,
     }
 
-    local trigger = [[bash -c '
-      stdbuf -oL alsactl monitor
-    ']]
+    local trigger = string.format([[bash -c '
+      stdbuf -oL alsactl monitor hw:%s
+    ']], card)
 
-    local value_cmd = [[bash -c '
-      amixer sget Master
-    ']]
-
+    local value_cmd = string.format([[bash -c '
+      amixer -D "hw:%s" sget Master
+    ']], card)
 
     function update(trigger_line)
         awful.spawn.easy_async(
