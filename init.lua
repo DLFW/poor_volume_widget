@@ -69,11 +69,11 @@ function factory(shape, inner_shape, margins, border_width)
                 text_widget:set_text(value_string .. "%" .. (muted and " (mute)" or ""))
                 progress_bar.value = value
                 if muted then
-                    progress_bar.border_color = beautiful.bg_minimize
-                    progress_bar.color = beautiful.bg_minimize
+                    progress_bar.border_color = beautiful.border_muted_poor_volume or beautiful.bg_minimize
+                    progress_bar.color = beautiful.bar_muted_poor_volume or beautiful.bg_minimize
                 else
-                    progress_bar.border_color = beautiful.bg_focus
-                    progress_bar.color = beautiful.bg_focus
+                    progress_bar.border_color = beautiful.border_poor_volume or beautiful.bg_focus
+                    progress_bar.color = beautiful.bar_poor_volume or beautiful.bg_focus
                 end
             end
         )
