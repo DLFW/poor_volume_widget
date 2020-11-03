@@ -6,11 +6,12 @@ local beautiful = require("beautiful")
 
 local card = "PCH"
 
-function factory(shape, inner_shape, margins, border_width)
+function factory(shape, inner_shape, margins, border_width, width)
     shape = shape or gears.shape.rounded_bar
     inner_shape = inner_shape or gears.shape.rectangle
     margins = margins or {5, 4, 5, 4}
     border_width = border_width or 1
+    width = width or 100
     local text_widget = wibox.widget {
         font = beautiful.font,
         align  = 'center',
@@ -43,8 +44,8 @@ function factory(shape, inner_shape, margins, border_width)
         right = margins[2],
         bottom= margins[3],
         left = margins[4],
-        width = 100,
-        forced_width = 100,
+        width = width,
+        forced_width = width,
         layout = wibox.container.margin,
     }
 
