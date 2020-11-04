@@ -4,7 +4,8 @@ local naughty = require("naughty")
 local gears = require("gears")
 local beautiful = require("beautiful")
 
-local card = "PCH"
+--local card = "hw:PCH"
+local card = "pulse"
 
 function factory(shape, inner_shape, margins, border_width, width)
     shape = shape or gears.shape.rounded_bar
@@ -50,11 +51,11 @@ function factory(shape, inner_shape, margins, border_width, width)
     }
 
     local trigger = string.format([[bash -c '
-      stdbuf -oL alsactl monitor hw:%s
+      stdbuf -oL alsactl monitor %s
     ']], card)
 
     local value_cmd = string.format([[bash -c '
-      amixer -D "hw:%s" sget Master
+      amixer -D "%s" sget Master
     ']], card)
 
     function update(trigger_line)
